@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debts - Admin Dashboard</title>
+    <!-- Bootstrap 4 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-size: 0.875rem;
+            padding-top: 56px;
+        }
+        .sidebar {
+            position: fixed;
+            top: 56px;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 0;
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+            width: 250px;
+        }
+        .sidebar-sticky {
+            position: relative;
+            top: 0;
+            height: calc(100vh - 56px);
+            padding-top: 0.5rem;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        .sidebar .nav-link {
+            font-weight: 500;
+            color: #333;
+            padding: 0.75rem 1rem;
+        }
+        .sidebar .nav-link.active {
+            color: #007bff;
+            background-color: rgba(0, 123, 255, 0.1);
+        }
+        .sidebar .nav-link:hover {
+            color: #007bff;
+        }
+        [role="main"] {
+            margin-left: 250px;
+            padding: 1rem;
+        }
+        @media (max-width: 767.98px) {
+            .sidebar {
+                position: static;
+                height: auto;
+                width: 100%;
+            }
+            .sidebar-sticky {
+                height: auto;
+            }
+            [role="main"] {
+                margin-left: 0;
+            }
+        }
+        .overdue {
+            background-color: #f8d7da !important;
+        }
+        .due-soon {
+            background-color: #fff3cd !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-chart-line mr-2"></i>Admin Dashboard
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+                        <i class="fas fa-user-circle mr-1"></i>Admin User
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Profile</a>
+                        <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Settings</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <nav class="col-md-2 d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">
+                        <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="suppliers.html">
+                        <i class="fas fa-truck mr-2"></i>Nhà Cung Cấp
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="services.html">
+                        <i class="fas fa-concierge-bell mr-2"></i>Dịch Vụ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contracts.html">
+                        <i class="fas fa-file-contract mr-2"></i>Hợp Đồng
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="invoices.html">
+                        <i class="fas fa-file-invoice mr-2"></i>Hóa Đơn
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="fund-book.html">
+                        <i class="fas fa-book mr-2"></i>Sổ Quỹ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="debts.html">
+                        <i class="fas fa-credit-card mr-2"></i>Công Nợ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="reports.html">
+                        <i class="fas fa-chart-bar mr-2"></i>Reports
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="settings.html">
+                        <i class="fas fa-cog mr-2"></i>Settings
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main role="main">
+        <!-- Search Bar -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search debts...">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control">
+                    <option value="">All Status</option>
+                    <option value="current">Current</option>
+                    <option value="due_soon">Due Soon</option>
+                    <option value="overdue">Overdue</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Công Nợ (Debts Management)</h1>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#debtModal">
+                <i class="fas fa-plus mr-2"></i>Add New Debt
+            </button>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card border-left-danger shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Total Owed</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">$45,000</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Paid</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">$28,000</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Remaining</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">$17,000</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-clock fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Overdue</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">$7,500</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-calendar-times fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debts Table -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Debt Management</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Supplier</th>
+                                <th>Total Owed</th>
+                                <th>Paid</th>
+                                <th>Remaining</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="overdue">
+                                <td>
+                                    <strong>ABC Technology Co.</strong><br>
+                                    <small class="text-muted">john@abctech.com</small>
+                                </td>
+                                <td>$15,000.00</td>
+                                <td>$10,000.00</td>
+                                <td>$5,000.00</td>
+                                <td>2024-01-10</td>
+                                <td>
+                                    <span class="badge badge-danger">
+                                        <i class="fas fa-exclamation-triangle mr-1"></i>Overdue
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-success mr-1" data-toggle="modal" data-target="#paymentModal">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-warning mr-1" data-toggle="modal" data-target="#debtModal">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-info">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="due-soon">
+                                <td>
+                                    <strong>XYZ Services Ltd.</strong><br>
+                                    <small class="text-muted">jane@xyzservices.com</small>
+                                </td>
+                                <td>$8,000.00</td>
+                                <td>$6,000.00</td>
+                                <td>$2,000.00</td>
+                                <td>2024-01-25</td>
+                                <td>
+                                    <span class="badge badge-warning">
+                                        <i class="fas fa-clock mr-1"></i>Due Soon
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-success mr-1" data-toggle="modal" data-target="#paymentModal">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-warning mr-1" data-toggle="modal" data-target="#debtModal">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-info">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Global Solutions Inc.</strong><br>
+                                    <small class="text-muted">mike@globalsolutions.com</small>
+                                </td>
+                                <td>$22,000.00</td>
+                                <td>$12,000.00</td>
+                                <td>$10,000.00</td>
+                                <td>2024-02-15</td>
+                                <td>
+                                    <span class="badge badge-success">
+                                        <i class="fas fa-check mr-1"></i>Current
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-success mr-1" data-toggle="modal" data-target="#paymentModal">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-warning mr-1" data-toggle="modal" data-target="#debtModal">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-info">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pagination -->
+                <nav aria-label="Debt pagination">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit Debt Modal -->
+    <div class="modal fade" id="debtModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Debt</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="supplier">Supplier</label>
+                            <select class="form-control" id="supplier" required>
+                                <option value="">Select Supplier</option>
+                                <option value="1">ABC Technology Co.</option>
+                                <option value="2">XYZ Services Ltd.</option>
+                                <option value="3">Global Solutions Inc.</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="totalAmount">Total Amount Owed</label>
+                            <input type="number" class="form-control" id="totalAmount" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="paidAmount">Amount Already Paid</label>
+                            <input type="number" class="form-control" id="paidAmount" step="0.01" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="dueDate">Due Date</label>
+                            <input type="date" class="form-control" id="dueDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea class="form-control" id="description" rows="3" placeholder="Debt description or notes"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Save Debt</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Record Payment</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="paymentAmount">Payment Amount</label>
+                            <input type="number" class="form-control" id="paymentAmount" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentDate">Payment Date</label>
+                            <input type="date" class="form-control" id="paymentDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentMethod">Payment Method</label>
+                            <select class="form-control" id="paymentMethod">
+                                <option value="bank_transfer">Bank Transfer</option>
+                                <option value="cash">Cash</option>
+                                <option value="check">Check</option>
+                                <option value="credit_card">Credit Card</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentNotes">Notes</label>
+                            <textarea class="form-control" id="paymentNotes" rows="2" placeholder="Payment notes (optional)"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="sendPaymentNotification">
+                                <label class="form-check-label" for="sendPaymentNotification">
+                                    Send email notification when payment is successful
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Record Payment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 4 JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fund Book - Admin Dashboard</title>
+    <!-- Bootstrap 4 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-size: 0.875rem;
+            padding-top: 56px;
+        }
+        .sidebar {
+            position: fixed;
+            top: 56px;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 0;
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+            width: 250px;
+        }
+        .sidebar-sticky {
+            position: relative;
+            top: 0;
+            height: calc(100vh - 56px);
+            padding-top: 0.5rem;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        .sidebar .nav-link {
+            font-weight: 500;
+            color: #333;
+            padding: 0.75rem 1rem;
+        }
+        .sidebar .nav-link.active {
+            color: #007bff;
+            background-color: rgba(0, 123, 255, 0.1);
+        }
+        .sidebar .nav-link:hover {
+            color: #007bff;
+        }
+        [role="main"] {
+            margin-left: 250px;
+            padding: 1rem;
+        }
+        @media (max-width: 767.98px) {
+            .sidebar {
+                position: static;
+                height: auto;
+                width: 100%;
+            }
+            .sidebar-sticky {
+                height: auto;
+            }
+            [role="main"] {
+                margin-left: 0;
+            }
+        }
+        .income-row {
+            background-color: #d4edda !important;
+        }
+        .expense-row {
+            background-color: #f8d7da !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-chart-line mr-2"></i>Admin Dashboard
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+                        <i class="fas fa-user-circle mr-1"></i>Admin User
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Profile</a>
+                        <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Settings</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <nav class="col-md-2 d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">
+                        <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="suppliers.html">
+                        <i class="fas fa-truck mr-2"></i>Nhà Cung Cấp
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="services.html">
+                        <i class="fas fa-concierge-bell mr-2"></i>Dịch Vụ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contracts.html">
+                        <i class="fas fa-file-contract mr-2"></i>Hợp Đồng
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="invoices.html">
+                        <i class="fas fa-file-invoice mr-2"></i>Hóa Đơn
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="fund-book.html">
+                        <i class="fas fa-book mr-2"></i>Sổ Quỹ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="debts.html">
+                        <i class="fas fa-credit-card mr-2"></i>Công Nợ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="reports.html">
+                        <i class="fas fa-chart-bar mr-2"></i>Reports
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="settings.html">
+                        <i class="fas fa-cog mr-2"></i>Settings
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main role="main">
+        <!-- Search and Filter Bar -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search transactions...">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <input type="date" class="form-control" placeholder="From Date">
+            </div>
+            <div class="col-md-3">
+                <input type="date" class="form-control" placeholder="To Date">
+            </div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option value="">All Types</option>
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Sổ Quỹ (Fund Book)</h1>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#transactionModal">
+                <i class="fas fa-plus mr-2"></i>Add Transaction
+            </button>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Income</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">$25,000.00</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-arrow-up fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-left-danger shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Total Expenses</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">$8,500.00</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-arrow-down fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Net Balance</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">$16,500.00</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-balance-scale fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transactions Table -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Transaction History</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Category</th>
+                                <th>Amount</th>
+                                <th>Type</th>
+                                <th>Balance</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="income-row">
+                                <td>2024-01-20</td>
+                                <td>Payment from ABC Technology Co.</td>
+                                <td>Invoice Payment</td>
+                                <td>$5,000.00</td>
+                                <td><span class="badge badge-success">Income</span></td>
+                                <td>$16,500.00</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning mr-1" data-toggle="modal" data-target="#transactionModal">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="expense-row">
+                                <td>2024-01-18</td>
+                                <td>Office Rent Payment</td>
+                                <td>Operating Expenses</td>
+                                <td>$1,200.00</td>
+                                <td><span class="badge badge-danger">Expense</span></td>
+                                <td>$11,500.00</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning mr-1" data-toggle="modal" data-target="#transactionModal">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="income-row">
+                                <td>2024-01-15</td>
+                                <td>Service Payment from XYZ Corp</td>
+                                <td>Service Revenue</td>
+                                <td>$3,200.00</td>
+                                <td><span class="badge badge-success">Income</span></td>
+                                <td>$12,700.00</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning mr-1" data-toggle="modal" data-target="#transactionModal">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="expense-row">
+                                <td>2024-01-12</td>
+                                <td>Equipment Purchase</td>
+                                <td>Capital Expenses</td>
+                                <td>$2,500.00</td>
+                                <td><span class="badge badge-danger">Expense</span></td>
+                                <td>$9,500.00</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning mr-1" data-toggle="modal" data-target="#transactionModal">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pagination -->
+                <nav aria-label="Transaction pagination">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit Transaction Modal -->
+    <div class="modal fade" id="transactionModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Transaction</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="transactionDate">Date</label>
+                            <input type="date" class="form-control" id="transactionDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control" id="description" placeholder="Enter transaction description" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select class="form-control" id="category" required>
+                                <option value="">Select Category</option>
+                                <option value="invoice_payment">Invoice Payment</option>
+                                <option value="service_revenue">Service Revenue</option>
+                                <option value="operating_expenses">Operating Expenses</option>
+                                <option value="capital_expenses">Capital Expenses</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="amount">Amount</label>
+                            <input type="number" class="form-control" id="amount" step="0.01" placeholder="0.00" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="type">Type</label>
+                            <select class="form-control" id="type" required>
+                                <option value="">Select Type</option>
+                                <option value="income">Income</option>
+                                <option value="expense">Expense</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="notes">Notes</label>
+                            <textarea class="form-control" id="notes" rows="3" placeholder="Additional notes (optional)"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Save Transaction</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 4 JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
